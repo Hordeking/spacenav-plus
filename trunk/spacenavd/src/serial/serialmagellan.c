@@ -29,13 +29,39 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "serial/serialmagellan.h"
 
 /*
+v  MAGELLAN  Version 6.70  3Dconnexion GmbH 05/11/02
+*/		
+/* magellan spacemouse plus xt serial. after sending vQ\r */
+
+/*
 v  MAGELLAN  Version 6.60  3Dconnexion GmbH 05/11/01
-*/									/* magellan spacemouse plus xt serial. after sending vQ\r */
+*/		
+/* magellan spacemouse plus xt serial. after sending vQ\r */
+
+/*
+v  MAGELLAN  Version 6.50  LogiCad3D GmbH 05/11/00
+*/		
+/* magellan spacemouse plus xt serial. after sending vQ\r */
+
 
 
 /*
 v  MAGELLAN  Version 5.79  by LOGITECH INC. 10/10/97
-*/									/* magellan spacemouse. after sending vQ\r */
+*/
+/* magellan spacemouse. after sending vQ\r */
+
+/*
+v  MAGELLAN  Version 5.49  by LOGITECH INC. 10/22/96
+*/
+/* magellan spacemouse. after sending vQ\r */
+
+
+
+
+
+
+
+
 
 int file;
 struct InputStruct
