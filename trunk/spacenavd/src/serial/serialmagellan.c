@@ -43,8 +43,6 @@ v  MAGELLAN  Version 6.50  LogiCad3D GmbH 05/11/00
 */		
 /* magellan spacemouse plus xt serial. after sending vQ\r */
 
-
-
 /*
 v  MAGELLAN  Version 5.79  by LOGITECH INC. 10/10/97
 */
