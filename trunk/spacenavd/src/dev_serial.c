@@ -49,6 +49,12 @@ int open_dev_serial(const char *devfile)
                 else
                     printf("unknown device for version string: %s\n", device.version_string);
             }
+            else{
+                strcpy(device.name, "Spaceball 5000 FLX-A");
+                printf("Fallback Condition \n");
+                printf("Assuming: %s\n", device.name);
+                device.modelId = BALL_4000FLX;
+            }
             setup_device();
         }
 
