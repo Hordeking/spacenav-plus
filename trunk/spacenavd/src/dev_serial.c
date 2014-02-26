@@ -110,7 +110,14 @@ void derive_device_name_model()
                 device.modelId = BALL_5000FLX;
                 return;
         }
- 
+
+        instance = strstr(device.version_string, "MAGELLAN  Version 6.50");
+        if (instance){
+                strcpy(device.name, "Magellan Plus XT");
+                device.modelId = MOUSE_PLUS_XT;
+                return;
+        }
+
         instance = strstr(device.version_string, "MAGELLAN  Version 6.60");
         if (instance){
                 strcpy(device.name, "Magellan Plus XT");
