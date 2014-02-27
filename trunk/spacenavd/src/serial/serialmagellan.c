@@ -385,8 +385,26 @@ void processButtonKPacket()
       generateButtonEvent(9, input.packetBuf[3] & 0x04);/*right button*/
   }
 
+/*  
+  /* need a special case for the 5000FLX to avoid picking up the asterisk on other Magellan devices/
+
+  if (input.packetBuf[3] != oldState[3])
+  {
+    if ((input.packetBuf[3] & 0x01) != (oldState[3] & 0x01))
+      generateButtonEvent(9, input.packetBuf[3] & 0x01);      /*9 on the 5000FLX/
+    if ((input.packetBuf[3] & 0x02) != (oldState[3] & 0x02))
+      generateButtonEvent(9, input.packetBuf[3] & 0x02);      /*A on the 5000FLX/
+    if ((input.packetBuf[3] & 0x04) != (oldState[3] & 0x04))
+      generateButtonEvent(10, input.packetBuf[3] & 0x04);     /*B on the 5000FLX/
+    if ((input.packetBuf[3] & 0x08) != (oldState[3] & 0x08))
+      generateButtonEvent(11, input.packetBuf[3] & 0x08);     /*C on the 5000FLX/
+  }
+*/
+
   strcpy(oldState, input.packetBuf);
 }
+
+
 
 void processButtonCPacket()
 {
