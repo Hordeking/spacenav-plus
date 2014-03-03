@@ -343,6 +343,12 @@ void generateButtonEvent(int button, int newState)
 
 void processButtonKPacket()
 {
+
+/* added device ID detection for Spaceball 5000 buttons */
+
+  int device;
+   device = get_device_id();
+
   static char oldState[5] = {0x00, 0x00, 0x00, 0x00};
   
   if (input.packetBuf[1] != oldState[1])
@@ -372,7 +378,10 @@ void processButtonKPacket()
   /*skipping asterisk button. asterisk function come in through other packets.*/
   /*magellan plus has left and right (10, 11) buttons not magellan classic */
   /*not sure if we need to filter out lower button events for magellan classic*/
-  
+  /*Added special case to recognize the otherwise ignored buttons on the 5000FLX */
+
+ if (device != BALL_5000FLX)
+ {   
   if (input.packetBuf[3] != oldState[3])
   {
     /*
@@ -384,22 +393,21 @@ void processButtonKPacket()
     if ((input.packetBuf[3] & 0x04) != (oldState[3] & 0x04))
       generateButtonEvent(9, input.packetBuf[3] & 0x04);/*right button*/
   }
-
-/*  
-  /* need a special case for the 5000FLX to avoid picking up the asterisk on other Magellan devices/
-
+ }
+ else
+ {
   if (input.packetBuf[3] != oldState[3])
   {
     if ((input.packetBuf[3] & 0x01) != (oldState[3] & 0x01))
-      generateButtonEvent(9, input.packetBuf[3] & 0x01);      /*9 on the 5000FLX/
+      generateButtonEvent(8, input.packetBuf[3] & 0x01);      /*9 on the 5000FLX*/
     if ((input.packetBuf[3] & 0x02) != (oldState[3] & 0x02))
-      generateButtonEvent(9, input.packetBuf[3] & 0x02);      /*A on the 5000FLX/
+      generateButtonEvent(9, input.packetBuf[3] & 0x02);      /*A on the 5000FLX*/
     if ((input.packetBuf[3] & 0x04) != (oldState[3] & 0x04))
-      generateButtonEvent(10, input.packetBuf[3] & 0x04);     /*B on the 5000FLX/
+      generateButtonEvent(10, input.packetBuf[3] & 0x04);     /*B on the 5000FLX*/
     if ((input.packetBuf[3] & 0x08) != (oldState[3] & 0x08))
-      generateButtonEvent(11, input.packetBuf[3] & 0x08);     /*C on the 5000FLX/
+      generateButtonEvent(11, input.packetBuf[3] & 0x08);     /*C on the 5000FLX*/
   }
-*/
+ }
 
   strcpy(oldState, input.packetBuf);
 }
