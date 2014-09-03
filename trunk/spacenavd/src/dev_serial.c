@@ -49,12 +49,11 @@ int open_dev_serial(const char *devfile)
                 else
                     printf("unknown device for version string: %s\n", device.version_string);
             }
-            else{
-                strcpy(device.name, "Spaceball 5000 FLX-A");
-                printf("Fallback Condition \n");
-                printf("Assuming: %s\n", device.name);
-                device.modelId = BALL_4000FLX;
+            if(verbose) {
+                printf("Device: %s\n", device.name);
+ 		printf("Version: %s\n", device.version_string);
             }
+
             setup_device();
         }
 
@@ -110,67 +109,103 @@ void derive_device_name_model()
 {
         char *instance;
  
-	instance = strstr(device.version_string, "SPACEBALL Version 8.20");
+        instance = strstr(device.version_string, "SpaceExpl. Version 9.00");  /* temporary assign as 5000FLX until fix for new button packets */
         if (instance){
-                strcpy(device.name, "Spaceball 5000 FLX");
+                strcpy(device.name, "Space Explorer v9.00");
                 device.modelId = BALL_5000FLX;
                 return;
         }
 
-        instance = strstr(device.version_string, "MAGELLAN  Version 6.50");
+       instance = strstr(device.version_string, "SPACEBALL Version 8.20");
         if (instance){
-                strcpy(device.name, "Magellan Plus XT");
+                strcpy(device.name, "Spaceball 5000 FLX v8.20");
+                device.modelId = BALL_5000FLX;
+                return;
+        }
+
+        instance = strstr(device.version_string, "MAGELLAN  Version 6.70");
+        if (instance){
+                strcpy(device.name, "Magellan Plus XT v6.70");
                 device.modelId = MOUSE_PLUS_XT;
                 return;
         }
 
         instance = strstr(device.version_string, "MAGELLAN  Version 6.60");
         if (instance){
-                strcpy(device.name, "Magellan Plus XT");
+                strcpy(device.name, "Magellan Plus XT v6.60");
                 device.modelId = MOUSE_PLUS_XT;
                 return;
         }
 
-        instance = strstr(device.version_string, "MAGELLAN  Version 6.70");
+        instance = strstr(device.version_string, "MAGELLAN  Version 6.50");
         if (instance){
-                strcpy(device.name, "Magellan Plus");
+                strcpy(device.name, "Magellan Plus v6.50");
                 device.modelId = MOUSE_PLUS;
                 return;
         }
 
         instance = strstr(device.version_string, "MAGELLAN  Version 5.79");
         if (instance){
-                strcpy(device.name, "Magellan Classic");
+                strcpy(device.name, "Magellan Classic v5.79");
                 device.modelId = MOUSE_CLASSIC;
                 return;
         }
         
         instance = strstr(device.version_string, "MAGELLAN  Version 5.49");
         if (instance){
-                strcpy(device.name, "Magellan Classic");
+                strcpy(device.name, "Magellan Classic v5.49");
                 device.modelId = MOUSE_CLASSIC;
                 return;
         }
-
-        instance = strstr(device.version_string, "Hm2003C");
+ 
+        instance = strstr(device.version_string, "Firmware version 2.63");
         if (instance){
-                strcpy(device.name, "Spaceball 2003C");
+                strcpy(device.name, "Spaceball 3003 v2.63");
+                device.modelId = BALL_3003C;
+                return;
+	}
+ 
+        instance = strstr(device.version_string, "Firmware version 2.62");
+        if (instance){
+                strcpy(device.name, "Spaceball 3003 v2.62");
+                device.modelId = BALL_3003C;
+                return;
+	}
+ 
+        instance = strstr(device.version_string, "Firmware version 2.45");
+        if (instance){
+                strcpy(device.name, "Spaceball 5000 FLX-A v2.45");
+                device.modelId = BALL_4000FLX;
+                return;
+	}
+ 
+        instance = strstr(device.version_string, "Firmware version 2.43");
+        if (instance){
+                strcpy(device.name, "Spaceball 4000 FLX v2.43");
+                device.modelId = BALL_4000FLX;
+                return;
+	}
+ 
+        instance = strstr(device.version_string, "Firmware version 2.15");
+        if (instance){
+                strcpy(device.name, "Spaceball 2003 v2.15");
+                device.modelId = BALL_2003C;
+                return;
+        }
+
+        instance = strstr(device.version_string, "Hm2003C");  /* late 2003C and early 4000FLX models are both v2.42 */
+        if (instance){
+                strcpy(device.name, "Spaceball 2003C v2.42");
                 device.modelId = BALL_2003C;
                 return;
         }
         
-        instance = strstr(device.version_string, "Hm3003C");
-        if (instance){
-                strcpy(device.name, "Spaceball 3003C");
-                device.modelId = BALL_3003C;
-                return;
-        }        
-
         instance = strstr(device.version_string, "Spaceball 4000 FLX");
         if (instance){
-                strcpy(device.name, "Spaceball 4000 FLX");
+                strcpy(device.name, "Spaceball 4000 FLX v2.42");
                 device.modelId = BALL_4000FLX;
                 return;
+
         }
 }
 
