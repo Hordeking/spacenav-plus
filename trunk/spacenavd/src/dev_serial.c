@@ -97,7 +97,7 @@ void clear_device()
 void setup_device()
 {
   if (device.modelId == MOUSE_PLUS_XT || device.modelId == MOUSE_CLASSIC || device.modelId == MOUSE_PLUS
-    || device.modelId == BALL_5000FLX){
+    || device.modelId == BALL_5000FLX || device.modelId == EXPLORER){
       device.open_func = open_smag;
       device.close_func = close_smag;
       device.read_func = read_smag;
@@ -112,7 +112,7 @@ void derive_device_name_model()
         instance = strstr(device.version_string, "SpaceExpl. Version 9.00");  /* temporary assign as 5000FLX until fix for new button packets */
         if (instance){
                 strcpy(device.name, "Space Explorer v9.00");
-                device.modelId = BALL_5000FLX;
+                device.modelId = BALL_5000FLX;    /* will change id to EXPLORER when fixed */
                 return;
         }
 
