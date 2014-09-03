@@ -193,7 +193,14 @@ void derive_device_name_model()
                 return;
         }
 
-        instance = strstr(device.version_string, "Hm2003C");  /* late 2003C and early 4000FLX models are both v2.42 */
+        instance = strstr(device.version_string, "Firmware version 2.13");
+        if (instance){
+                strcpy(device.name, "Spaceball 2003 v2.13");
+                device.modelId = BALL_2003C;
+                return;
+        }
+
+	instance = strstr(device.version_string, "Hm2003C");  /* late 2003C and early 4000FLX models are both v2.42 */
         if (instance){
                 strcpy(device.name, "Spaceball 2003C v2.42");
                 device.modelId = BALL_2003C;
