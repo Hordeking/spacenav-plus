@@ -123,6 +123,13 @@ void derive_device_name_model()
                 return;
         }
 
+       instance = strstr(device.version_string, "CadMan    Version 7.10");
+        if (instance){
+                strcpy(device.name, "CadMan v7.10");
+                device.modelId = MOUSE_PLUS_XT;
+                return;
+        }
+
         instance = strstr(device.version_string, "MAGELLAN  Version 6.70");
         if (instance){
                 strcpy(device.name, "Magellan Plus XT v6.70");
