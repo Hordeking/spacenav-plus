@@ -29,28 +29,36 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "serial/serialmagellan.h"
 
 /*
+v SpaceExpl. Version 9.00  3Dconnexion GmbH 14/08/06  
+*							/* space explorer after. sending vQ\r */
+
+/*
 v  SPACEBALL Version 8.20  3Dconnexion GmbH 05/11/02  
-*/									/* magellan spaceball 5000. after sending vQ\r */
+*/							/* spaceball 5000. after sending vQ\r */
+
+/*
+v  CadMan    Version 7.10  3Dconnexion GmbH 21/03/02  
+*/							/* CadMan after sending vQ\r */
 
 /*
 v  MAGELLAN  Version 6.70  3Dconnexion GmbH 05/11/02
-*/									/* magellan spacemouse plus xt serial. after sending vQ\r */
+*/							/* magellan spacemouse plus xt serial. after sending vQ\r */
 
 /*
 v  MAGELLAN  Version 6.60  3Dconnexion GmbH 05/11/01
-*/									/* magellan spacemouse plus xt serial. after sending vQ\r */
+*/							/* magellan spacemouse plus xt serial. after sending vQ\r */
 
 /*
 v  MAGELLAN  Version 6.50  3Dconnexion GmbH 05/11/00
-*/									/* magellan spacemouse plus xt serial. after sending vQ\r */
+*/							/* magellan spacemouse plus xt serial. after sending vQ\r */
 
 /*
 v  MAGELLAN  Version 5.79  by LOGITECH INC. 10/10/97
-*/									/* magellan spacemouse. after sending vQ\r */
+*/							/* magellan spacemouse. after sending vQ\r */
 
 /*
 v  MAGELLAN  Version 5.49  by LOGITECH INC. 10/22/96
-*/									/* magellan spacemouse. after sending vQ\r */
+*/							/* magellan spacemouse. after sending vQ\r */
 
 
 int file;
