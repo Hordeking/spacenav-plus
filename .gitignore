@@ -4,3 +4,6 @@
 Makefile
 config.h
 spacenavd
+spnav_config.h
+libspnav.a
+libspnav.dylib

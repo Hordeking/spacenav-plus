@@ -2,6 +2,12 @@ CC = gcc
 CFLAGS = -pedantic -Wall -g -I../.. -I/usr/local/include
 LDFLAGS = -L../.. -L/usr/local/lib -lspnav -lX11
 
+UNAME_S := $(shell uname -s)
+ifeq ($(UNAME_S),Darwin)
+	CFLAGS += -I/opt/local/include
+	LDFLAGS += -L/opt/local/lib
+endif
+
 .PHONY: all
 all: simple_x11 simple_af_unix
 

@@ -6,18 +6,37 @@ soname = libspnav.so.0
 lib_so = $(soname).1
 devlink = libspnav.so
 
+UNAME_S := $(shell uname -s)
+ifeq ($(UNAME_S),Darwin)
+	lib_so = libspnav.dylib
+endif
+
 CC = gcc
 AR = ar
 CFLAGS = $(opt) $(dbg) -std=c89 -fpic -pedantic -Wall -fno-strict-aliasing -I. -I/usr/local/include
 
+ifeq ($(UNAME_S),Darwin)
+	CFLAGS += -I/opt/local/include
+endif
+
 .PHONY: all
 all: $(lib_a) $(lib_so)
+
+.PHONE: examples
+examples: $(lib_a) $(lib_so)
+	make -C examples/simple
+	make -C examples/cube
 
 $(lib_a): $(obj)
 	$(AR) rcs $@ $(obj)
 
+ifeq ($(UNAME_S),Darwin)
+$(lib_so): $(obj)
+	$(CC) -dynamiclib -undefined suppress -flat_namespace -o $@ $(obj)
+else
 $(lib_so): $(obj)
 	$(CC) -shared -Wl,-soname,$(soname) -o $@ $(obj)
+endif
 
 %.o: $(srcdir)/%.c
 	$(CC) $(CFLAGS) -c $< -o $@
@@ -30,6 +49,14 @@ clean:
 distclean:
 	rm -f $(obj) $(lib_a) $(lib_so) Makefile
 
+ifeq ($(UNAME_S),Darwin)
+.PHONY: install
+install: $(lib_a) $(lib_so)
+	mkdir -p $(PREFIX)/$(libdir) $(PREFIX)/include
+	cp $(lib_a) $(PREFIX)/$(libdir)/$(lib_a)
+	cp $(lib_so) $(PREFIX)/$(libdir)/$(lib_so)
+	for h in $(hdr); do cp -p $(srcdir)/$$h $(PREFIX)/include/; done
+else
 .PHONY: install
 install: $(lib_a) $(lib_so)
 	mkdir -p $(PREFIX)/$(libdir) $(PREFIX)/include
@@ -39,6 +66,7 @@ install: $(lib_a) $(lib_so)
 	ln -s $(PREFIX)/$(libdir)/$(lib_so) $(PREFIX)/$(libdir)/$(soname)
 	ln -s $(PREFIX)/$(libdir)/$(soname) $(PREFIX)/$(libdir)/$(devlink)
 	for h in $(hdr); do cp -p $(srcdir)/$$h $(PREFIX)/include/; done
+endif
 
 .PHONY: uninstall
 uninstall:
