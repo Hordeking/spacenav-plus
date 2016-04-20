@@ -18,6 +18,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "stdio.h"
 #include "string.h"
+#include "spnavd.h"
 #include "dev_serial.h"
 #include "serial/serialconstants.h"
 #include "serial/sball.h"

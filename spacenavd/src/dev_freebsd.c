@@ -16,7 +16,7 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifdef __FreeBSD__
+#if defined(__FreeBSD__) || defined(__APPLE__)
 
 #include "config.h"
 #include <stdio.h>
@@ -89,4 +89,4 @@ void set_led(int state)
 {
 }
 
-#endif	/* __FreeBSD__ */
+#endif	/* defined(__FreeBSD__) || defined(__APPLE__) */

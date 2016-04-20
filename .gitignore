@@ -1,1 +1,6 @@
 .DS_Store
+*.d
+*.o
+Makefile
+config.h
+spacenavd

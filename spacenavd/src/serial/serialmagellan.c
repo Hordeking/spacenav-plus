@@ -23,6 +23,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <unistd.h>
 #include <sys/ioctl.h>
 #include <string.h>
+#include "dev_serial.h"
 #include "serial/serialconstants.h"
 #include "serial/serialevent.h"
 #include "serial/serialcommunication.h"

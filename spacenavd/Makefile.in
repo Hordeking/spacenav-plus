@@ -10,6 +10,12 @@ INSTALL = install
 CFLAGS = -pedantic -Wall $(dbg) $(opt) -fno-strict-aliasing -I$(srcdir)/src -I/usr/local/include
 LDFLAGS = -L/usr/local/lib $(xlib)
 
+UNAME_S := $(shell uname -s)
+ifeq ($(UNAME_S),Darwin)
+	CFLAGS += -I/opt/local/include
+	LDFLAGS += -L/opt/local/lib
+endif
+
 $(bin): $(obj)
 	$(CC) -o $@ $(obj) $(LDFLAGS)
 
