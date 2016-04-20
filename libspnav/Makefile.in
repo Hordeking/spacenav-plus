@@ -44,6 +44,8 @@ endif
 .PHONY: clean
 clean:
 	rm -f $(obj)
+	rm -f $(lib_a)
+	rm -f $(lib_so)
 
 .PHONY: cleandist
 distclean:

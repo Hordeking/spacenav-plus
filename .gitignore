@@ -7,3 +7,4 @@ spacenavd
 spnav_config.h
 libspnav.a
 libspnav.dylib
+spnavcfg
