@@ -8,3 +8,8 @@ spnav_config.h
 libspnav.a
 libspnav.dylib
 spnavcfg
+cube
+simple_x11
+simple_x11.dSYM
+simple_af_unix.dSYM
+simple_af_unix
