@@ -1,0 +1,158 @@
+From 668f45b30e2e2b3aa9ed2674a942104d7866b49f Mon Sep 17 00:00:00 2001
+From: Thomas Buck <xythobuz@xythobuz.de>
+Date: Sun, 24 Apr 2016 00:02:44 +0200
+Subject: [PATCH 2/2] Added Thread polling for Spaceball events generating
+ events. Very hacky.
+
+---
+ src/Gui/GuiApplicationNativeEventAware.cpp | 59 ++++++++++++++++++++++++++++++
+ src/Gui/GuiApplicationNativeEventAware.h   | 33 +++++++++++++++++
+ 2 files changed, 92 insertions(+)
+
+diff --git a/src/Gui/GuiApplicationNativeEventAware.cpp b/src/Gui/GuiApplicationNativeEventAware.cpp
+index ce78826..f121a83 100644
+--- a/src/Gui/GuiApplicationNativeEventAware.cpp
++++ b/src/Gui/GuiApplicationNativeEventAware.cpp
+@@ -46,8 +46,34 @@ Gui::GUIApplicationNativeEventAware* Gui::GUIApplicationNativeEventAware::gMouse
+ #endif
+ #endif //_USE_3DCONNEXION_SDK
+ 
++#ifdef SPNAV_FOUND
++#ifndef Q_WS_X11
++void Gui::SpaceballThread::stop()
++{
++    QMutexLocker locker(&mutex);
++    halt = true;
++}
++
++void Gui::SpaceballThread::run()
++{
++    while (true)
++    {
++        gui->spaceballMessageLoop();
++        QMutexLocker locker(&mutex);
++        if (halt) break;
++        msleep(1);
++    }
++}
++#endif
++#endif
++
+ Gui::GUIApplicationNativeEventAware::GUIApplicationNativeEventAware(int &argc, char *argv[]) :
+         QApplication (argc, argv), spaceballPresent(false)
++#ifdef SPNAV_FOUND
++#ifndef Q_WS_X11
++        , spaceballThread(this)
++#endif
++#endif
+ {
+     mainWindow = 0;
+ }
+@@ -55,6 +81,11 @@ Gui::GUIApplicationNativeEventAware::GUIApplicationNativeEventAware(int &argc, c
+ Gui::GUIApplicationNativeEventAware::~GUIApplicationNativeEventAware()
+ {
+ #ifdef SPNAV_FOUND
++#ifndef Q_WS_X11
++    // Stop Thread polling spacenavd and wait for it to really stop
++    spaceballThread.stop();
++    spaceballThread.wait();
++#endif
+     if (spnav_close())
+         Base::Console().Log("Couldn't disconnect from spacenav daemon\n");
+     else
+@@ -102,6 +133,9 @@ void Gui::GUIApplicationNativeEventAware::initSpaceball(QMainWindow *window)
+     {
+         Base::Console().Log("Connected to spacenav daemon\n");
+         spaceballPresent = true;
++
++        // Setup Thread to poll spacenavd for new events
++        spaceballThread.start();
+     }
+ #endif
+ #endif
+@@ -509,6 +543,31 @@ bool Gui::GUIApplicationNativeEventAware::x11EventFilter(XEvent *event)
+     return false;
+ #endif // SPNAV_FOUND
+ }
++#else
++#ifdef SPNAV_FOUND
++void Gui::GUIApplicationNativeEventAware::spaceballMessageLoop() {
++    spnav_event event;
++    int type = spnav_poll_event(&event);
++    if (type == SPNAV_EVENT_MOTION) {
++        Spaceball::MotionEvent *motionEvent = new Spaceball::MotionEvent();
++        motionEvent->setTranslations(-event.motion.x * 1.5,
++                -event.motion.y * 1.5, event.motion.z * 1.5);
++        motionEvent->setRotations(-event.motion.rx * 2.0,
++                -event.motion.ry * 2.0, event.motion.rz * 2.0);
++        this->postEvent(mainWindow, motionEvent); // TODO current widget?
++    } else if (type == SPNAV_EVENT_BUTTON) {
++        Spaceball::ButtonEvent *buttonEvent = new Spaceball::ButtonEvent();
++        buttonEvent->setButtonNumber(event.button.bnum);
++        if (event.button.press)
++            buttonEvent->setButtonStatus(Spaceball::BUTTON_PRESSED);
++        else
++            buttonEvent->setButtonStatus(Spaceball::BUTTON_RELEASED);
++        this->postEvent(mainWindow, buttonEvent); // TODO current widget?
++    } else {
++        Base::Console().Log("Unknown spaceball event\n");
++    }
++}
++#endif
+ #endif // Q_WS_X11
+ 
+ #include "moc_GuiApplicationNativeEventAware.cpp"
+diff --git a/src/Gui/GuiApplicationNativeEventAware.h b/src/Gui/GuiApplicationNativeEventAware.h
+index b52cb05..5f1ee12 100644
+--- a/src/Gui/GuiApplicationNativeEventAware.h
++++ b/src/Gui/GuiApplicationNativeEventAware.h
+@@ -60,6 +60,32 @@ extern void CleanupConnexionHandlers(void) __attribute__((weak_import));
+ 
+ #endif // _USE_3DCONNEXION_SDK
+ 
++#ifndef Q_WS_X11
++#ifdef SPNAV_FOUND
++#include <QThread>
++#include <QMutex>
++#include <QMutexLocker>
++
++namespace Gui
++{
++    class GUIApplicationNativeEventAware;
++
++    class SpaceballThread : public QThread
++    {
++    public:
++        SpaceballThread(GUIApplicationNativeEventAware *ui) : gui(ui), halt(false) { }
++        void stop();
++        void run();
++
++    private:
++        GUIApplicationNativeEventAware *gui;
++        QMutex mutex;
++        bool halt;
++    };
++}
++#endif
++#endif
++
+ namespace Gui
+ {
+     class GUIApplicationNativeEventAware : public QApplication
+@@ -83,6 +109,13 @@ namespace Gui
+ #ifdef Q_WS_X11
+     public:
+         bool x11EventFilter(XEvent *event);
++#else
++#ifdef SPNAV_FOUND
++    public:
++        void spaceballMessageLoop();
++    private:
++        SpaceballThread spaceballThread;
++#endif
+ #endif // Q_WS_X11
+ 
+ #ifdef _USE_3DCONNEXION_SDK
+-- 
+2.8.1
+

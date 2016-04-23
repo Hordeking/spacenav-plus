@@ -39,5 +39,7 @@ Now, start the daemon in one terminal window (to see the verbose output) and the
     sudo ~/test/bin/spacenavd -d -v
     ./examples/cube/cube
 
-That’s it for now.
+## Getting it to work
+
+None of the programs I use regularly supports building with the spnav library on the Mac out of the box. To start, I’ve hacked support for the spnav library without using X11 into FreeCAD, which already support spnav on Linux. The patches are in this repository, called `0001-Initialize-spacenavd-without-X11-if-not-available.patch` and `0002-Added-Thread-polling-for-Spaceball-events-generating.patch`. They can be applied cleanly on top of [FreeCAD](https://github.com/FreeCAD/FreeCAD) commit [bfaa8799edba35ae1609edb6205aaeacf37b73ff](https://github.com/FreeCAD/FreeCAD/commit/bfaa8799edba35ae1609edb6205aaeacf37b73ff).
 
