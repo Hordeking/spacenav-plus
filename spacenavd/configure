@@ -41,6 +41,10 @@ X11=yes
 HOTPLUG=yes
 VER=`head -1 README | sed 's/^.*- //'`
 
+if [ "`uname -s`" = 'Darwin' ]; then
+    X11=no
+fi
+
 if echo $VER | grep '$Rev' >/dev/null; then
 	VER=svn-r`echo $VER | awk '{print $2}' | sed 's/$//g'`
 fi

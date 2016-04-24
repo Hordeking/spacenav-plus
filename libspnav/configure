@@ -7,6 +7,10 @@ OPT=yes
 DBG=yes
 X11=yes
 
+if [ "`uname -s`" = 'Darwin' ]; then
+    X11=no
+fi
+
 srcdir="`dirname "$0"`"
 libdir=lib
 
