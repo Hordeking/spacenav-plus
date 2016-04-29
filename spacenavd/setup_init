@@ -27,6 +27,17 @@ setup_bsd_init() {
 	echo "BSD init setup not implemented yet, you'll have to do it manually."
 }
 
+setup_mac_init() {
+    if [ "$1" = 'remove' ]; then
+        echo 'unloading launchctl plist'
+        launchctl unload /Library/LaunchDaemons/de.xythobuz.spacenavd.plist
+        rm -f /Library/LaunchDaemons/de.xythobuz.spacenavd.plist
+    else
+        echo 'loading launchctl plist'
+        install -m 644 launchctl_script /Library/LaunchDaemons/de.xythobuz.spacenavd.plist
+        launchctl load /Library/LaunchDaemons/de.xythobuz.spacenavd.plist
+    fi
+}
 
 if [ "$1" = '--no-install' ]; then
 	echo
@@ -47,6 +58,11 @@ fi
 if [ -f /etc/rc -a -d /etc/rc.d ]; then
 	setup_bsd_init $*
 	exit 0
+fi
+
+if [ -d /Library/LaunchDaemons ]; then
+    setup_mac_init $*
+    exit 0
 fi
 
 echo "You're either using a non-standard init or this detection failed."
