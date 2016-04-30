@@ -1,5 +1,51 @@
 #!/usr/bin/env python
 
+# -----------------------------------------------------------------------------
+#
+# Usage:
+#
+# enum:
+#     SPNAV_EVENT_ANY
+#     SPNAV_EVENT_MOTION
+#     SPNAV_EVENT_BUTTON
+#
+# structure SpnavMotionEvent:
+#     int x, y, z
+#     int rx, ry, rz
+#     uint period
+#     int* data
+#
+# structure SpnavButtonEvent:
+#     int press, bnum
+#
+# union SpnavEvent:
+#     int type
+#     SpnavMotionEvent motion
+#     SpnavButtonEvent button
+#
+# Open connection to the daemon via AF_UNIX socket
+# Returns 'True' on error, 'False' on success
+# def spnavOpen()
+#
+# Close connection to the daemon
+# Returns 'True' on error, 'False' on success
+# def spnavClose()
+#
+# Blocks waiting for space-nav events
+# Returns 'None' on error or an event on success
+# def spnavWaitEvent()
+#
+# Checks for the availability of space-nav events (non-blocking)
+# Returns 'None' if no event available or an event on success
+# def spnavPollEvent()
+#
+# Removes any pending events from the specified type, or all pending
+# events if the type argument is SPNAV_EVENT_ANY. Returns the number
+# of removed events.
+# def spnavRemoveEvents(eventType)
+#
+# -----------------------------------------------------------------------------
+
 from sys import platform
 from ctypes import (Structure, Union, c_int, c_uint, POINTER, CDLL, byref)
 
