@@ -34,9 +34,9 @@ OF SUCH DAMAGE.
 #endif
 
 enum {
-	SPNAV_EVENT_ANY,	/* used by spnav_remove_events() */
-	SPNAV_EVENT_MOTION,
-	SPNAV_EVENT_BUTTON	/* includes both press and release */
+	SPNAV_EVENT_ANY = 0,	/* used by spnav_remove_events() */
+	SPNAV_EVENT_MOTION = 1,
+	SPNAV_EVENT_BUTTON = 2	/* includes both press and release */
 };
 
 struct spnav_event_motion {
