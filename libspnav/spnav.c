@@ -462,7 +462,7 @@ int spnav_remove_events(int type)
 			spnav_event event;
 
 			read_event(sock, &event);	/* remove next event */
-			if(event.type != type) {
+			if((event.type != type) && (type = SPNAV_EVENT_ANY)) {
 				/* We don't want to drop this one, wrong type. Keep the event
 				 * in the temporary list, for deferred reinsertion
 				 */
