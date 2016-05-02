@@ -187,6 +187,7 @@ import time
 def signalHandler(signal, frame):
     global interrupted
     interrupted = True
+    print
 
 def main():
     print "Trying to open connection..."
