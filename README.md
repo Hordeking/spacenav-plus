@@ -47,3 +47,13 @@ None of the programs I use regularly supports building with the spnav library on
 
 I’ve also modified [the patch from Gert Menke](http://forum.openscad.org/Working-on-SpacePilot-support-need-help-with-rotation-tp13057p13236.html) to suit my setup. You can find `0001-Added-hacky-spnav-lib-support.patch` in the `patches/OpenSCAD` directory. It can be applied cleanly on top of [OpenSCAD](https://github.com/openscad/openscad) commit [50441e85a2d0920af6a1a886b97edc001f4dc0ae](https://github.com/openscad/openscad/commit/50441e85a2d0920af6a1a886b97edc001f4dc0ae).
 
+# spacenavd
+
+This is the driver daemon. It connects to the Space Mouse and sends event using the X Window System, if desired, and using a simple unix socket interface. It reads its configurations from the file `/etc/spnavrc`. An example config can be found in `spacenavd/doc/example-spnavrc`.
+
+Sending the signals `SIGUSR1` or `SIGUSR2` to the daemon causes it to start or stop sending X11 events.
+
+Sending SIGHUP will cause the daemon to reload the configuration file.
+
+For more informations, take a look at `spacenavd/README`.
+

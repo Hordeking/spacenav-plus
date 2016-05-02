@@ -13,3 +13,4 @@ libspnav/examples/simple/simple_x11
 libspnav/examples/simple/simple_x11.dSYM
 libspnav/examples/simple/simple_af_unix.dSYM
 libspnav/examples/simple/simple_af_unix
+*.pyc

@@ -33,6 +33,11 @@ spacenavd - $Rev$
   during system startup. However, for now, you won't have to reboot, just type
   ``/etc/init.d/spacenavd start'' as root, to start the daemon immediately.
 
+  If you're running Mac OS X run ``setup_init'' to install a launchctl script
+  in ``/Library/LaunchDaemons/de.xythobuz.spacenavd.plist''. It will be loaded
+  by the script. You can unload it by running ``setup_init remove'' or
+  ``sudo launchctl unload /Library/LaunchDaemons/de.xythobuz.spacenavd.plist''.
+
   If your system uses BSD init (you can tell if you *don't* have a series of
   directories called rc0.d, rc1.d, and so on, in /etc), then you'll have to
   follow your init documentation and set this up yourself. You may be able to
@@ -45,6 +50,10 @@ spacenavd - $Rev$
   The daemon should respond immediately to your changes, and also the
   configuration file should be updated automatically.
   An example configuration file is included in the doc subdirectory.
+
+  Sending SIGHUP will cause the daemon to reread the configuration file. You
+  can do this with the following command:
+      sudo kill -SIGHUP `cat /var/run/spnavd.pid`
 
 6. Troubleshooting
   If you're having trouble running spacenavd, read the up to date FAQ on the
