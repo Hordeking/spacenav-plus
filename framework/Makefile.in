@@ -6,7 +6,7 @@ target = 3DconnexionClient.framework
 
 CC = clang
 CFLAGS = -arch i386 -arch x86_64 -fPIC $(opt) $(dbg) -Wall -Werror -I. -I/usr/local/include
-LDFLAGS = -arch i386 -arch x86_64 -lobjc -framework Foundation -dynamiclib -current_version 1.0 -compatibility_version 1.0 -fvisibility=hidden -undefined suppress -flat_namespace
+LDFLAGS = -arch i386 -arch x86_64 -L/usr/local/lib -lspnav -lobjc -framework Foundation -dynamiclib -current_version 1.0 -compatibility_version 1.0 -fvisibility=hidden
 
 .PHONY: all
 all: $(target)
