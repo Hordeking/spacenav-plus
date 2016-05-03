@@ -14,3 +14,5 @@ libspnav/examples/simple/simple_x11.dSYM
 libspnav/examples/simple/simple_af_unix.dSYM
 libspnav/examples/simple/simple_af_unix
 *.pyc
+3DconnexionClient
+3DconnexionClient.framework

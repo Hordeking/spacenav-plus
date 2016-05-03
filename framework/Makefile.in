@@ -1,0 +1,48 @@
+
+obj = client.o
+hdr = ConnexionClient.h ConnexionClientAPI.h
+lib = 3DconnexionClient
+target = 3DconnexionClient.framework
+
+CC = clang
+CFLAGS = -arch i386 -arch x86_64 -fPIC $(opt) $(dbg) -Wall -Werror -I. -I/usr/local/include
+LDFLAGS = -arch i386 -arch x86_64 -lobjc -framework Foundation -dynamiclib -current_version 1.0 -compatibility_version 1.0 -fvisibility=hidden -undefined suppress -flat_namespace
+
+.PHONY: all
+all: $(target)
+
+$(lib): $(obj) $(hdr)
+	$(CC) $(LDFLAGS) -o $@ $(obj)
+
+%.o: $(srcdir)/%.m $(hdr)
+	$(CC) $(CFLAGS) -c $< -o $@
+
+$(target): $(lib) $(hdr)
+	mkdir -p $(target)/Versions/A/Headers
+	mkdir -p $(target)/Versions/A/Resources/English.lproj
+	cp $(lib) $(target)/Versions/A
+	cp $(hdr) $(target)/Versions/A/Headers
+	cp Info.plist $(target)/Versions/A/Resources
+	cp InfoPlist.strings $(target)/Versions/A/Resources/English.lproj
+#	ln -s Versions/A/$(lib) $(target)/$(lib)
+#	ln -s Versions/A/Headers $(target)/Headers
+#	ln -s Versions/A/Resources $(target)/Resources
+#	ln -s A $(target)/Versions/Current
+
+.PHONY: clean
+clean:
+	rm -rf $(obj) $(lib) $(target)
+
+.PHONY: cleandist
+distclean: clean
+	rm -rf Makefile
+
+.PHONY: install
+install: $(target) uninstall
+	mkdir -p $(PREFIX)
+	cp -R $(target) $(PREFIX)/$(target)
+
+.PHONY: uninstall
+uninstall:
+	rm -rf $(PREFIX)/$(target)
+
