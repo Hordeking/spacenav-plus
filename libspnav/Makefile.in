@@ -16,7 +16,11 @@ AR = ar
 CFLAGS = $(opt) $(dbg) -std=c89 -fpic -pedantic -Wall -fno-strict-aliasing -I. -I/usr/local/include
 
 ifeq ($(UNAME_S),Darwin)
+	CC = clang
+
 	CFLAGS += -I/opt/local/include
+	CFLAGS += -arch i386 -arch x86_64
+	LDFLAGS += -arch i386 -arch x86_64
 endif
 
 .PHONY: all
@@ -27,15 +31,20 @@ examples: $(lib_a) $(lib_so)
 	make -C examples/simple
 	make -C examples/cube
 
+ifeq ($(UNAME_S),Darwin)
+.PHONY: $(lib_a)
+$(lib_a):
+else
 $(lib_a): $(obj)
 	$(AR) rcs $@ $(obj)
+endif
 
 ifeq ($(UNAME_S),Darwin)
 $(lib_so): $(obj)
-	$(CC) -dynamiclib -undefined suppress -flat_namespace -o $@ $(obj)
+	$(CC) $(LDFLAGS) -dynamiclib -undefined suppress -flat_namespace -o $@ $(obj)
 else
 $(lib_so): $(obj)
-	$(CC) -shared -Wl,-soname,$(soname) -o $@ $(obj)
+	$(CC) $(LDFLAGS) -shared -Wl,-soname,$(soname) -o $@ $(obj)
 endif
 
 %.o: $(srcdir)/%.c
@@ -53,9 +62,8 @@ distclean:
 
 ifeq ($(UNAME_S),Darwin)
 .PHONY: install
-install: $(lib_a) $(lib_so)
+install: $(lib_so)
 	mkdir -p $(PREFIX)/$(libdir) $(PREFIX)/include
-	cp $(lib_a) $(PREFIX)/$(libdir)/$(lib_a)
 	cp $(lib_so) $(PREFIX)/$(libdir)/$(lib_so)
 	for h in $(hdr); do cp -p $(srcdir)/$$h $(PREFIX)/include/; done
 else
