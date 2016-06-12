@@ -24,10 +24,10 @@ $(target): $(lib) $(hdr)
 	cp $(hdr) $(target)/Versions/A/Headers
 	cp Info.plist $(target)/Versions/A/Resources
 	cp InfoPlist.strings $(target)/Versions/A/Resources/English.lproj
-#	ln -s Versions/A/$(lib) $(target)/$(lib)
-#	ln -s Versions/A/Headers $(target)/Headers
-#	ln -s Versions/A/Resources $(target)/Resources
-#	ln -s A $(target)/Versions/Current
+	ln -s Versions/A/$(lib) $(target)/$(lib)
+	ln -s Versions/A/Headers $(target)/Headers
+	ln -s Versions/A/Resources $(target)/Resources
+	ln -s A $(target)/Versions/Current
 
 .PHONY: clean
 clean:

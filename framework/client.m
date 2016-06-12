@@ -44,20 +44,21 @@ static pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
 
 static void handleEvent(spnav_event *event) {
     if (event->type == SPNAV_EVENT_MOTION) {
+        device.command = kConnexionCmdHandleAxis;
+        device.time = mach_absolute_time();
+        device.buttons8 = 0;
+        device.buttons = 0;
+        device.axis[0] = -event->motion.x;
+        device.axis[1] = -event->motion.y;
+        device.axis[2] = -event->motion.z;
+        device.axis[3] = -event->motion.rx;
+        device.axis[4] = -event->motion.ry;
+        device.axis[5] = -event->motion.rz;
+
+        // Send to all clients, regardless of what has been requested
         for (int i = 0; i < MAX_CLIENTS; i++) {
             if (clients[i].registered != 0) {
                 device.client = i;
-                device.command = kConnexionCmdHandleAxis;
-                device.time = mach_absolute_time();
-                device.buttons8 = 0;
-                device.buttons = 0;
-                device.axis[0] = -event->motion.x;
-                device.axis[1] = -event->motion.y;
-                device.axis[2] = -event->motion.z;
-                device.axis[3] = -event->motion.rx;
-                device.axis[4] = -event->motion.ry;
-                device.axis[5] = -event->motion.rz;
-
                 theMessageHandler(0, kConnexionMsgDeviceState, &device);
             }
         }

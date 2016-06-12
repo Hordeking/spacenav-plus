@@ -52,12 +52,16 @@ This is my simple Python Wrapper using the libspnav dynamic library, providing p
 
 ## framework
 
-This is my reimplementation of the official 3DconnexionClient Mac OS X Framework. It uses the original headers but reimplements the basic functionality using the libspnav library. It can be dropped into applications using the official SDK to replace it. This has been tested with Google Earth:
+This is my reimplementation of the official 3DconnexionClient Mac OS X Framework. It uses the original headers but reimplements the basic functionality using the libspnav library.
 
+By default it will be installed to `/Library/Frameworks`. Many programs, for example Blender, will pick it up there and be able to use the spacenavd device.
+
+For some other applications, it has to be dropped into the application bundle (you may want to backup the original one). This has been tested with Google Earth:
+
+    sudo mv /Applications/Google\ Earth\ Pro.app/Contents/Frameworks/3DconnexionClient.framework /Applications/Google\ Earth\ Pro.app/Contents/Frameworks/3DconnexionClient.framework.original
     cd framework
     ./configure --prefix="/Applications/Google\ Earth\ Pro.app/Contents/Frameworks"
     make
-    sudo mv "/Applications/Google\ Earth\ Pro.app/Contents/Frameworks/3DconnexionClient.framework /Applications/Google\ Earth\ Pro.app/Contents/Frameworks/3DconnexionClient.framework.original
     sudo make install
 
 ## Using it in other programs
