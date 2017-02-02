@@ -4,6 +4,8 @@
 # https://github.com/SketchUp/sketchup-ruby-api-tutorials/tree/master/tutorials/01_hello_cube
 # C-Library wrapping based on:
 # http://blog.honeybadger.io/use-any-c-library-from-ruby-via-fiddle-the-ruby-standard-librarys-best-kept-secret/
+# Camera Rolling based on:
+# https://bitbucket.org/thomthom/camera-tools/src/d946acfa6a80a73777d45200d60c960fd901e12d/src/tt_camera/core.rb?at=default&fileviewer=file-view-default
 
 require 'sketchup.rb'
 
