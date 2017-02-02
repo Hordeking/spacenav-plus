@@ -1,4 +1,5 @@
 # Copyright 2016 Trimble Navigation Limited
+# Copyright 2017 Thomas Buck <xythobuz@xythobuz.de>
 # Licensed under the MIT license
 
 # This demonstrate the required pattern for Extensions to be accepted to the
@@ -38,8 +39,8 @@ require 'extensions.rb'
 # 
 # This allows you to put all your extensions into a single module representing
 # you as developer/company.
-module Examples
-  module HelloCube
+module Xythobuz
+  module SpacenavDriver
 
     # The use of `file_loaded?` here is to prevent the extension being
     # registered multiple times. This can happen for various reasons where the
@@ -62,15 +63,15 @@ module Examples
       # wrote `tut_hello_world/main` instead of `tut_hello_world/main.rb`.
       # SketchUp is smart enough to find the file regardless and this is
       # required if you decide to later encrypt the extension.
-      ex = SketchupExtension.new('Hello Cube', 'tut_hello_cube/main')
+      ex = SketchupExtension.new('Spacenav Driver', 'spacenav_drv/main')
 
       # Next we add some information to the extension. This isn't required, but
       # highly recommended as it helps the user when managing it's installed
       # extensions.
-      ex.description = 'SketchUp Ruby API example creating a cube.'
+      ex.description = 'Spacenav 6D Mouse driver interface.'
       ex.version     = '1.0.0'
-      ex.copyright   = 'Trimble Navigations © 2016'
-      ex.creator     = 'SketchUp'
+      ex.copyright   = 'xythobuz.de © 2017'
+      ex.creator     = 'Thomas Buck'
 
       # Finally we tell SketchUp to register this extension. Remember to always
       # set the second argument to true - this tells SketchUp to load the
@@ -83,5 +84,5 @@ module Examples
       file_loaded(__FILE__)
     end
 
-  end # module HelloCube
-end # module Examples
+  end # module SpacenavDriver
+end # module Xythobuz

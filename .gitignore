@@ -16,3 +16,4 @@ libspnav/examples/simple/simple_af_unix
 *.pyc
 3DconnexionClient
 3DconnexionClient.framework
+*.rbz
