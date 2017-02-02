@@ -53,6 +53,26 @@ module Xythobuz
       end
     end # class ConnectionCloseHelper
 
+    def self.moveCamera(x, y, z, camera)
+      #puts("Move #{x}, #{y}, #{z}")
+    end
+
+    def self.rotateCamera(x, y, z, camera)
+      #puts("Rotate #{x}, #{y}, #{z}")
+
+      scaleFactorY = -250.0
+      scaleFactorZ = 250.0
+
+      t = Geom::Transformation.rotation(camera.eye, camera.up, (y / scaleFactorY) * 3.14 / 180.0)
+      target = camera.target.transform(t)
+      camera.set(camera.eye, target, camera.up)
+
+      # Roll camera
+      t = Geom::Transformation.rotation(camera.eye, camera.direction, (z / scaleFactorZ) * 3.14 / 180.0)
+      up = camera.up.transform(t)
+      camera.set(camera.eye, camera.target, up)
+    end
+
     def self.poll_commands
       if @connectionOpen == 0
         return
@@ -63,11 +83,15 @@ module Xythobuz
       if rv != -1
         if event.type == 1
           # Motion event
-          puts("Motion Event")
+          camera = Sketchup.active_model.active_view.camera
+          moveCamera(event.x, event.y, event.z, camera)
+          rotateCamera(event.rx, event.ry, event.rz, camera)
         elsif event.type == 2
           # Button event
           eventBut = Library::SpnavEventButton.new(event)
           puts("Button Event: #{eventBut.bnum} @ #{eventBut.press}")
+
+          # TODO if you want the buttons to do something add relevant code here
         end
       end
     end
