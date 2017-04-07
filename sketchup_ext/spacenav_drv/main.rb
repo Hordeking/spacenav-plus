@@ -15,6 +15,9 @@ require 'fiddle/import'
 
 module Xythobuz
   module SpacenavDriver
+
+    # Wrapper for Spacenav C-Library, exports the relevant data structures
+    # and the spnav_open(), spnav_close and spnav_poll_event(event) calls.
     module Library
       extend Fiddle::Importer
 
@@ -44,8 +47,10 @@ module Xythobuz
       extern 'int spnav_poll_event(SpnavEvent *event)'
     end # module Library
 
+    # Global variable holding connection state. Used for closing the
+    # connection on exit, if required, in conjunction with the following
+    # helper class/object.
     @connectionOpen = 0
-
     class ConnectionCloseHelper < Sketchup::AppObserver
       def onUnloadExtension(extension_name)
         if @connectionOpen == 1
@@ -55,26 +60,48 @@ module Xythobuz
       end
     end # class ConnectionCloseHelper
 
+    # Called for all spaceball translate events
     def self.moveCamera(x, y, z, camera)
-      #puts("Move #{x}, #{y}, #{z}")
+      scaleFactorXm = -10
+      scaleFactorYm = 10
+      scaleFactorZm = 10
+      
+      # Scaled vector with translation in camera space
+      v = Geom::Vector3d.new(x / scaleFactorXm, y / scaleFactorYm, z / scaleFactorZm)
+
+      # Transform to move from camera space to world space
+      t = Geom::Transformation.axes(camera.eye, camera.up * camera.direction, camera.up, camera.direction)
+
+      # Move camera eye and target vectors
+      r = v.transform(t)
+      eye = camera.eye + r
+      target = camera.target + r
+      camera.set(eye, target, camera.up)
     end
 
+    # Called for all spaceball rotate events
     def self.rotateCamera(x, y, z, camera)
-      #puts("Rotate #{x}, #{y}, #{z}")
+      scaleFactorXr = 250.0
+      scaleFactorYr = -250.0
+      scaleFactorZr = -250.0
 
-      scaleFactorY = -250.0
-      scaleFactorZ = 250.0
-
-      t = Geom::Transformation.rotation(camera.eye, camera.up, (y / scaleFactorY) * 3.14 / 180.0)
+      # Rotate around camera right axis
+      t = Geom::Transformation.rotation(camera.eye, camera.up * camera.direction, (x / scaleFactorXr) * 3.14 / 180.0)
       target = camera.target.transform(t)
       camera.set(camera.eye, target, camera.up)
 
-      # Roll camera
-      t = Geom::Transformation.rotation(camera.eye, camera.direction, (z / scaleFactorZ) * 3.14 / 180.0)
+      # Rotate around camera up axis
+      t = Geom::Transformation.rotation(camera.eye, camera.up, (y / scaleFactorYr) * 3.14 / 180.0)
+      target = camera.target.transform(t)
+      camera.set(camera.eye, target, camera.up)
+
+      # Roll camera around look-at axis
+      t = Geom::Transformation.rotation(camera.eye, camera.direction, (z / scaleFactorZr) * 3.14 / 180.0)
       up = camera.up.transform(t)
       camera.set(camera.eye, camera.target, up)
     end
 
+    # Poll a single event and act upon it, if it exists.
     def self.poll_commands
       if @connectionOpen == 0
         return
@@ -105,14 +132,15 @@ module Xythobuz
       frames_per_second = 30.0
       pause_length = 1.0 / frames_per_second
 
+      # Initialize spnav lib
       rv = Library::spnav_open()
       if rv != -1
+        # Ensure connection is closed on quit.
         @connectionOpen = 1
-
         Sketchup.add_observer(ConnectionCloseHelper.new)
 
+        # Poll in specified interval
         puts("Opened connection to Spacenav Driver...")
-
         UI.start_timer(pause_length, true) {
           poll_commands()
         }

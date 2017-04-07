@@ -70,3 +70,5 @@ None of the programs I use regularly supports building with the spnav library on
 
 I’ve also modified [the patch from Gert Menke](http://forum.openscad.org/Working-on-SpacePilot-support-need-help-with-rotation-tp13057p13236.html) to suit my setup. You can find `0001-Added-hacky-spnav-lib-support.patch` in the `patches/OpenSCAD` directory. It can be applied cleanly on top of [OpenSCAD](https://github.com/openscad/openscad) commit [50441e85a2d0920af6a1a886b97edc001f4dc0ae](https://github.com/openscad/openscad/commit/50441e85a2d0920af6a1a886b97edc001f4dc0ae).
 
+Check out the Readme in 'sketchup_ext' for more infos about my simple proof-of-concept Sketchup 2017 libspnav extension.
+
