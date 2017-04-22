@@ -82,6 +82,8 @@ int main(int argc, char **argv)
 	read_cfg("/etc/spnavrc", &cfg);
 
 	if(init_clients() == -1) {
+		fprintf(stderr, "Error initializing client list!\n");
+		remove(PIDFILE);
 		return 1;
 	}
 
@@ -93,7 +95,11 @@ int main(int argc, char **argv)
 	signal(SIGUSR2, sig_handler);
 
 	if(init_dev() == -1) {
-		init_hotplug();
+		if(init_hotplug() == -1) {
+			fprintf(stderr, "Error initializing device connection!\n");
+			remove(PIDFILE);
+			return 1;
+		}
 	}
 	init_unix();
 #ifdef USE_X11
